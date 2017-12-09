@@ -1,0 +1,101 @@
+$UNIT_REM: true
+
+@function _ct($value)
+    @if ($UNIT_REM)
+        $rem: $value / 16
+        @return #{$rem}rem
+    @else
+        @return $value
+
+@function remCalc($value)
+    $rem: $value / 16
+    @return #{$rem}rem
+
+=q($max)
+    @media (min-width: 0) and (max-width: $max+'px')
+        @content
+=element($element)
+    &__#{$element}
+        @content
+
+=modifier($modifier)
+    &--#{$modifier}
+        @content
+
+=e($element)
+    +element($element)
+        @content
+
+=m($modifier)
+    +modifier($modifier)
+        @content
+
+=media($max)
+    @media (min-width: 0) and (max-width: $max + 'px')
+        @content
+
+=border($t,$r,$bt,$l)
+    @if $t != 0
+        border-top: $t+px solid $grey-second
+    @if $r != 0
+        border-right: $r+px solid $grey-second
+    @if $bt != 0
+        border-bottom: $bt+px solid $grey-second
+    @if $l != 0
+        border-left: $l+px solid $grey-second
+=f($w,$s)
+    font: $w remCalc($s) $font
+
+=pa($t,$r,$bt,$l)
+    position: absolute
+    @if $t != ''
+        top: $t
+    @if $r != ''
+        right: $r
+    @if $bt != ''
+        bottom: $bt
+    @if $l != ''
+        left: $l
+
+=pr($t,$r,$bt,$l)
+    position: relative
+    @if $t != ''
+        top: $t
+    @if $r != ''
+        right: $r
+    @if $bt != ''
+        bottom: $bt
+    @if $l != ''
+        left: $l
+
+=wh($w,$h)
+    @if $w != ''
+        width: $w
+    @if $h != ''
+        height: $h
+
+=whr($w,$h)
+    @if $w != ''
+        width: _ct($w)
+    @if $h != ''
+        height: _ct($h)
+
+=padding($t,$r,$b,$l)
+    @if $t != ''
+        padding-top: _ct($t)
+    @if $r != ''
+        padding-right: _ct($r)
+    @if $bt != ''
+        padding-bottom: _ct($bt)
+    @if $l != ''
+        padding-left: _ct($l)
+
+=margin($t,$r,$b,$l)
+    @if $t != ''
+        margin-top: _ct($t)
+    @if $r != ''
+        margin-right: _ct($r)
+    @if $bt != ''
+        margin-bottom: _ct($bt)
+    @if $l != ''
+        margin-left: _ct($l)
