@@ -7,27 +7,29 @@
     "@babel/core": "^7.0.0-beta.34",
     "@babel/preset-env": "^7.0.0-beta.34",
     "babel-loader": "^8.0.0-beta.0",
+    "browser-sync": "^2.18.13",
     "css-loader": "^0.28.7",
     "extract-loader": "^1.0.1",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "node-sass": "^4.7.2",
     "pug-html-loader": "^1.1.5",
-    "pug-loader": "^2.3.0",
     "sass-loader": "^6.0.6",
+    "string-replace-webpack-plugin": "^0.1.3",
     "style-loader": "^0.19.0",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.7"
   },
   "devDependencies": {
+    "browser-sync-webpack-plugin": "^1.2.0",
     "clean-webpack-plugin": "^0.1.17",
-    "html-loader": "^0.5.1",
-    "html-webpack-plugin": "^2.30.1",
-    "image-webpack-loader": "^3.4.2"
+    "image-webpack-loader": "^3.4.2",
+    "replace-string-loader": "0.0.7",
+    "string-replace-loader": "^1.3.0"
   },
   "scripts": {
-    "dev": "webpack-dev-server --hot --open --config webpack.config.js",
-    "prod": "webpack --config webpack.prod.js"
+    "dev": "webpack --watch",
+    "prod": "webpack"
   },
   "author": "",
   "license": "ISC"

@@ -1,35 +1,60 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const StringReplacePlugin = require("string-replace-webpack-plugin");
+
 
 const opath = path.resolve(__dirname, 'dist')
 
 
 
-const config = {
+
+const config = ({
     entry: './app/webpack.js',
 
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: opath,
         pathinfo: true,
-        filename: 'app.bundle.js',
+        filename: '[hash].js',
     },
 
     module: {
         rules: [{
             test: /\.js$/,
             exclude: /(node_modules|bower_components)/,
-            use: {
+            use: [{
                 loader: 'babel-loader',
                 options: {
                     presets: ['@babel/preset-env']
                 }
-            }
+            }]
         }, {
             test: /\.pug$/,
-            loaders: ['file-loader?name=[name].html', 'pug-html-loader?pretty&exports=false']
+            use: [{
+                loader: 'file-loader?name=[name].html'
+            }, {
+                loader: 'pug-html-loader',
+                options: {
+                    pretty: false,
+                    exports: false
+                }
+            }, {
+                loader: StringReplacePlugin.replace({
+                    replacements: [{
+                        pattern: /cssBundle/ig,
+                        replacement:  () => {
+                            return 'css/app.bundle.css';
+                        }
+                    }, {
+                        pattern: /jsBundle/ig,
+                        replacement: () => {
+                            return 'app.bundle.js';
+                        }
+                    }]
+                })
+            }]
         }, {
             test: /\.sass$/,
             use: ExtractTextPlugin.extract({
@@ -44,26 +69,29 @@ const config = {
                 outputPath: 'images/',
                 name: '[name]-[hash:6].[ext]'
             }
-        }, ],
-    },
-    devServer: {
-        contentBase: path.join(__dirname, 'dist'),
-        compress: false,
-        port: 8080,
-        stats: 'errors-only',
-        hot: true,
-        historyApiFallback: true
+        }, ]
     },
     plugins: [
-        new ExtractTextPlugin('css/app.bundle.css'),
+        new webpack.ExtendedAPIPlugin(),
+        new StringReplacePlugin(),
+        new ExtractTextPlugin('css/[hash].css'),
         new CleanWebpackPlugin(opath, {
             root: path.resolve(__dirname, ''),
             verbose: true,
             dry: false
         }),
+        new BrowserSyncPlugin({
+            host: 'localhost',
+            port: 3000,
+            server: {
+                baseDir: ['dist']
+            }
+        }),
+
 
     ]
 
-};
+});
+
 
 module.exports = config;
