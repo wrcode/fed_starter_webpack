@@ -3,21 +3,39 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const StringReplacePlugin = require("string-replace-webpack-plugin");
 
+const paths = {
+    output: path.resolve(__dirname, 'dist'),
+    input: path.resolve(__dirname, 'app')
+};
 
-const opath = path.resolve(__dirname, 'dist')
-
-
+const plugins = {
+    etp: new ExtractTextPlugin('css/[hash].css'),
+    cwp: new CleanWebpackPlugin(paths.output, {
+        root: '',
+        verbose: true,
+        dry: false
+    }),
+    bsp: new BrowserSyncPlugin({
+        host: 'webpack',
+        port: 3000,
+        server: {
+            baseDir: ['dist']
+        }
+    })
+}
 
 
 const config = ({
-    entry: './app/webpack.js',
+    entry: [
+        paths.input + '/javascript/app.js',
+        paths.input + '/sass/main.sass'
+    ],
 
     output: {
-        path: opath,
+        path: paths.output,
         pathinfo: true,
-        filename: '[hash].js',
+        filename: './js/[hash].js',
     },
 
     module: {
@@ -40,20 +58,6 @@ const config = ({
                     pretty: false,
                     exports: false
                 }
-            }, {
-                loader: StringReplacePlugin.replace({
-                    replacements: [{
-                        pattern: /cssBundle/ig,
-                        replacement:  () => {
-                            return 'css/app.bundle.css';
-                        }
-                    }, {
-                        pattern: /jsBundle/ig,
-                        replacement: () => {
-                            return 'app.bundle.js';
-                        }
-                    }]
-                })
             }]
         }, {
             test: /\.sass$/,
@@ -62,34 +66,16 @@ const config = ({
                 use: ['css-loader', 'sass-loader']
             })
         }, {
-            test: /\.(jpg|png|gif)$/,
+            test: /.(jpg|png|gif)$/,
             loader: 'file-loader',
             options: {
                 publicPath: '/',
                 outputPath: 'images/',
                 name: '[name]-[hash:6].[ext]'
             }
-        }, ]
+        }]
     },
-    plugins: [
-        new webpack.ExtendedAPIPlugin(),
-        new StringReplacePlugin(),
-        new ExtractTextPlugin('css/[hash].css'),
-        new CleanWebpackPlugin(opath, {
-            root: path.resolve(__dirname, ''),
-            verbose: true,
-            dry: false
-        }),
-        new BrowserSyncPlugin({
-            host: 'localhost',
-            port: 3000,
-            server: {
-                baseDir: ['dist']
-            }
-        }),
-
-
-    ]
+    plugins: [plugins.etp, plugins.cwp, plugins.bsp]
 
 });
 
