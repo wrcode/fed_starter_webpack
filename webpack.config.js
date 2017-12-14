@@ -13,14 +13,14 @@ const paths = {
     input: path.resolve(__dirname, 'app')
 };
 
-const templates = () => {
+const templates = (directory) => {
 
-    let templates = fs.readdirSync(paths.input + '/pug/').filter(function (file) {
+    let templates = fs.readdirSync(paths.input + directory).filter(function (file) {
         return file.match(/.*\.pug$/);
     });
 
     for (index in templates) {
-        templates[index] = paths.input + '/pug/' + templates[index]
+        templates[index] = paths.input + directory + templates[index]
     }
 
     return templates;
@@ -44,7 +44,7 @@ const plugins = {
         path: '',
         filename: 'upload.zip'
     }),
-    uglify: new webpack.optimize.UglifyJsPlugin()
+    uglify: new webpack.optimize.UglifyJsPlugin({ comments: false })
 
 }
 
@@ -53,7 +53,7 @@ const config = ({
     entry: [
         paths.input + '/javascript/app.js',
         paths.input + '/sass/main.sass',
-        ...templates()
+        ...templates('/pug/')
     ],
 
     output: {
@@ -79,14 +79,27 @@ const config = ({
             }, {
                 loader: 'pug-html-loader',
                 options: {
-                    pretty: ( prod ? false : true)
+                    pretty: (prod ? false : true)
                 }
             }]
         }, {
             test: /\.sass$/,
+
             use: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
-                use: ['css-loader', 'sass-loader']
+                use: [{
+                    loader: 'css-loader',
+
+                }, {
+                    loader: 'postcss-loader',
+                    options: {
+                        config: {
+                            path: './configs/postcss.config.js'
+                        }
+                    }
+                }, {
+                    loader: 'sass-loader'
+                }]
             })
         }, {
             test: /.(jpg|png|gif)$/,
