@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const path = require('path');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
-
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const prod = process.argv.indexOf('-p') !== -1;
 
 const paths = {
@@ -43,7 +43,8 @@ const plugins = {
     zip: new ZipPlugin({
         path: '',
         filename: 'upload.zip'
-    })
+    }),
+    uglify: new webpack.optimize.UglifyJsPlugin()
 
 }
 
@@ -78,7 +79,7 @@ const config = ({
             }, {
                 loader: 'pug-html-loader',
                 options: {
-                    pretty: false
+                    pretty: ( prod ? false : true)
                 }
             }]
         }, {
@@ -101,9 +102,9 @@ const config = ({
 
 });
 
-prod && config.plugins.push(plugins.zip)
-!prod && config.plugins.push(plugins.bsp)
-
+prod && config.plugins.push(plugins.zip);
+prod && config.plugins.push(plugins.uglify);
+!prod && config.plugins.push(plugins.bsp);
 
 
 
