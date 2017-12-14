@@ -1,13 +1,30 @@
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const fs = require('fs');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+const ZipPlugin = require('zip-webpack-plugin');
+
+const prod = process.argv.indexOf('-p') !== -1;
 
 const paths = {
     output: path.resolve(__dirname, 'dist'),
     input: path.resolve(__dirname, 'app')
 };
+
+const templates = () => {
+
+    let templates = fs.readdirSync(paths.input + '/pug/').filter(function (file) {
+        return file.match(/.*\.pug$/);
+    });
+
+    for (index in templates) {
+        templates[index] = paths.input + '/pug/' + templates[index]
+    }
+
+    return templates;
+}
 
 const plugins = {
     etp: new ExtractTextPlugin('css/app.bundle.css'),
@@ -22,7 +39,12 @@ const plugins = {
         server: {
             baseDir: ['dist']
         }
+    }),
+    zip: new ZipPlugin({
+        path: '',
+        filename: 'upload.zip'
     })
+
 }
 
 
@@ -30,7 +52,7 @@ const config = ({
     entry: [
         paths.input + '/javascript/app.js',
         paths.input + '/sass/main.sass',
-        paths.input + '/pug/index.pug'
+        ...templates()
     ],
 
     output: {
@@ -56,8 +78,7 @@ const config = ({
             }, {
                 loader: 'pug-html-loader',
                 options: {
-                    pretty: false,
-                    exports: false
+                    pretty: false
                 }
             }]
         }, {
@@ -76,9 +97,14 @@ const config = ({
             }
         }]
     },
-    plugins: [plugins.etp, plugins.cwp, plugins.bsp]
+    plugins: [plugins.etp, plugins.cwp]
 
 });
+
+prod && config.plugins.push(plugins.zip)
+!prod && config.plugins.push(plugins.bsp)
+
+
 
 
 module.exports = config;

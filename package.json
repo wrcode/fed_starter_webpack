@@ -21,11 +21,12 @@
   "devDependencies": {
     "browser-sync-webpack-plugin": "^1.2.0",
     "clean-webpack-plugin": "^0.1.17",
-    "image-webpack-loader": "^3.4.2"
+    "image-webpack-loader": "^3.4.2",
+    "zip-webpack-plugin": "^2.1.0"
   },
   "scripts": {
     "dev": "webpack --watch",
-    "prod": "webpack"
+    "prod": "webpack -p"
   },
   "author": "",
   "license": "ISC"
