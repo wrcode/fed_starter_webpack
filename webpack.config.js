@@ -10,7 +10,7 @@ const paths = {
 };
 
 const plugins = {
-    etp: new ExtractTextPlugin('css/[hash].css'),
+    etp: new ExtractTextPlugin('css/app.bundle.css'),
     cwp: new CleanWebpackPlugin(paths.output, {
         root: '',
         verbose: true,
@@ -29,13 +29,14 @@ const plugins = {
 const config = ({
     entry: [
         paths.input + '/javascript/app.js',
-        paths.input + '/sass/main.sass'
+        paths.input + '/sass/main.sass',
+        paths.input + '/pug/index.pug'
     ],
 
     output: {
         path: paths.output,
         pathinfo: true,
-        filename: './js/[hash].js',
+        filename: './js/app.bundle.js',
     },
 
     module: {
