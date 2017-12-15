@@ -6,6 +6,8 @@ const path = require('path');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const ZipPlugin = require('zip-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const WebpackSpritePlugin = require('webpack-sprite-plugin');
+
 const prod = process.argv.indexOf('-p') !== -1;
 
 const paths = {
@@ -44,7 +46,12 @@ const plugins = {
         path: '',
         filename: 'upload.zip'
     }),
-    uglify: new webpack.optimize.UglifyJsPlugin()
+    uglify: new webpack.optimize.UglifyJsPlugin(),
+    wsp: new WebpackSpritePlugin({
+        cwd: path.resolve(__dirname, 'app/images/icons'),
+        glob: '*.png',
+        result: 'images/sprite.png'
+    })
 
 }
 
@@ -79,7 +86,7 @@ const config = ({
             }, {
                 loader: 'pug-html-loader',
                 options: {
-                    pretty: ( prod ? false : true)
+                    pretty: (prod ? false : true)
                 }
             }]
         }, {
