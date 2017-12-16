@@ -46,16 +46,12 @@ const plugins = {
         path: '',
         filename: 'upload.zip'
     }),
-<<<<<<< HEAD
     uglify: new webpack.optimize.UglifyJsPlugin(),
     wsp: new WebpackSpritePlugin({
         cwd: path.resolve(__dirname, 'app/images/icons'),
         glob: '*.png',
         result: 'images/sprite.png'
     })
-=======
-    uglify: new webpack.optimize.UglifyJsPlugin({ comments: false })
->>>>>>> e5f717b68f2dd58cb20420277bba665a81bd45d7
 
 }
 
