@@ -15,19 +15,6 @@ const paths = {
     input: path.resolve(__dirname, 'app')
 };
 
-const templates = (directory) => {
-
-    let templates = fs.readdirSync(paths.input + directory).filter(function (file) {
-        return file.match(/.*\.pug$/);
-    });
-
-    for (index in templates) {
-        templates[index] = paths.input + directory + templates[index]
-    }
-
-    return templates;
-}
-
 const plugins = {
     etp: new ExtractTextPlugin('css/app.bundle.css'),
     cwp: new CleanWebpackPlugin(paths.output, {
@@ -60,7 +47,6 @@ const config = ({
     entry: [
         paths.input + '/javascript/app.js',
         paths.input + '/sass/main.sass',
-        ...templates('/pug/')
     ],
 
     output: {
@@ -76,7 +62,7 @@ const config = ({
             use: [{
                 loader: 'babel-loader',
                 options: {
-                    presets: ['@babel/preset-env']
+                    presets: ['env']
                 }
             }]
         }, {
