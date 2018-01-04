@@ -16,25 +16,25 @@ const paths = {
 };
 
 const plugins = {
-    etp: new ExtractTextPlugin('css/app.bundle.css'),
-    cwp: new CleanWebpackPlugin(paths.output, {
+    ExtractTextPlugin: new ExtractTextPlugin('css/app.bundle.css'),
+    CleanWebpackPlugin: new CleanWebpackPlugin(paths.output, {
         root: '',
         verbose: true,
         dry: false
     }),
-    bsp: new BrowserSyncPlugin({
+    BrowserSyncPlugin: new BrowserSyncPlugin({
         host: 'webpack',
         port: 3000,
         server: {
             baseDir: ['dist']
         }
     }),
-    zip: new ZipPlugin({
+    ZipPlugin: new ZipPlugin({
         path: '',
         filename: 'upload.zip'
     }),
-    uglify: new webpack.optimize.UglifyJsPlugin(),
-    wsp: new WebpackSpritePlugin({
+    UglifyJsPlugin: new webpack.optimize.UglifyJsPlugin(),
+    WebpackSpritePlugin: new WebpackSpritePlugin({
         cwd: path.resolve(__dirname, 'app/images/icons'),
         glob: '*.png',
         result: 'images/sprite.png'
@@ -108,13 +108,13 @@ const config = ({
             }
         }]
     },
-    plugins: [plugins.etp, plugins.cwp]
+    plugins: [plugins.ExtractTextPlugin, plugins.CleanWebpackPlugin]
 
 });
 
-prod && config.plugins.push(plugins.zip);
-prod && config.plugins.push(plugins.uglify);
-!prod && config.plugins.push(plugins.bsp);
+prod && config.plugins.push(plugins.ZipPlugin);
+prod && config.plugins.push(plugins.UglifyJsPlugin);
+!prod && config.plugins.push(plugins.BrowserSyncPlugin);
 
 
 
