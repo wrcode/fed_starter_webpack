@@ -47,6 +47,7 @@ const config = ({
     entry: [
         paths.input + '/javascript/app.js',
         paths.input + '/sass/main.sass',
+        paths.input + '/pug/index.pug',
     ],
 
     output: {
@@ -72,7 +73,10 @@ const config = ({
             }, {
                 loader: 'pug-html-loader',
                 options: {
-                    pretty: (prod ? false : true)
+                    pretty: (prod ? false : true),
+                    data: {
+                        title: ''
+                    }
                 }
             }]
         }, {
