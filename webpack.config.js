@@ -57,7 +57,12 @@ const config = ({
     },
 
     module: {
-        rules: [{
+        rules: [ {
+            test: /\.ts$/,
+            use: [{
+                loader: 'ts-loader'
+            }]
+        },{
             test: /\.js$/,
             exclude: /(node_modules|bower_components)/,
             use: [{
