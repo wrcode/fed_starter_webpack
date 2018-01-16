@@ -63,15 +63,6 @@ const config = ({
                 loader: 'ts-loader'
             }]
         },{
-            test: /\.js$/,
-            exclude: /(node_modules|bower_components)/,
-            use: [{
-                loader: 'babel-loader',
-                options: {
-                    presets: ['env']
-                }
-            }]
-        }, {
             test: /\.pug$/,
             use: [{
                 loader: 'file-loader?name=[name].html'
