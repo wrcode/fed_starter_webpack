@@ -45,9 +45,9 @@ const plugins = {
 
 const config = ({
     entry: [
-        paths.input + '/javascript/app.js',
-        paths.input + '/sass/main.sass',
-        paths.input + '/pug/index.pug',
+        `${paths.input}/javascript/app.js`,
+        `${paths.input}/sass/main.sass`,
+        `${paths.input}/pug/index.pug`,
     ],
 
     output: {
@@ -69,10 +69,7 @@ const config = ({
             }, {
                 loader: 'pug-html-loader',
                 options: {
-                    pretty: (prod ? false : true),
-                    data: {
-                        title: ''
-                    }
+                    pretty: (prod ? false : true)
                 }
             }]
         }, {
@@ -98,7 +95,7 @@ const config = ({
             test: /.(jpg|png|gif)$/,
             loader: 'file-loader',
             options: {
-                publicPath: '/',
+                publicPath: '../images/',
                 outputPath: 'images/',
                 name: '[name]-[hash:6].[ext]'
             }
